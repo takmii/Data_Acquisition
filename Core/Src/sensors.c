@@ -97,4 +97,10 @@ HAL_StatusTypeDef setupSensors(){
 	return HAL_OK;
 }
 
+unsigned short vBatValue(unsigned short ADC_Value){
+	float vBat = ADC_Value*(VBAT_R1 + VBAT_R2)/VBAT_R2;
+	unsigned short vBat0 = vBat/A_20V * 4095;
+	return vBat0;
+}
+
 

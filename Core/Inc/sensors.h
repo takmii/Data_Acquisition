@@ -9,6 +9,27 @@ extern "C" {
 
 HAL_StatusTypeDef setupSensors();
 
+#define V_4095 3.3
+#define A_20V 24818
+#define A_5_5V 6825
+
+#define V_REF_R1 1520
+#define V_REF_R2 1780
+
+#define MUX1_R1 2200
+#define MUX1_R2 3890
+
+#define MUX2_R1 2200
+#define MUX2_R2 3900
+
+#define MUX3_R1 2200
+#define MUX3_R2 3890
+
+#define VBAT_R1 20000
+#define VBAT_R2 3900
+
+unsigned short vBatValue(unsigned short ADC_Value);
+
 extern unsigned int Message_Debug_Time;
 extern const unsigned short MESSAGE_DEBUG_REFRESH_RATE;
 

@@ -146,13 +146,13 @@ void sensorTask(void *argument)
 		adc_value=readADCValue1(0);
 		//hal_message = sendCANString("Teste: ");
 		sprintf(value, "%u", adc_value);
-		//hal_message = sendCANString(value);
+		hal_message = sendCANString(value);
 		}
 
 	if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
 	    DATA_01.time = RTOS_Time;
 
-	    data = readADCValue1(VBAT_PIN);  // Tensao da Bateria
+	    data = vBatValue(readADCValue1(VBAT_PIN));  // Tensao da Bateria
 	    DATA_01.data[0] = data&0xFF;
 	    DATA_01.data[1] = (data>>8)&0xF;
 	    data = readADCValue1(TEMP_PIN);  // Sensor de Temperatura Interno
