@@ -1,0 +1,2 @@
+../Core/Src/can_write.c:8:19:sendCANString	64	static
+../Core/Src/can_write.c:50:19:sendCANData	48	static
