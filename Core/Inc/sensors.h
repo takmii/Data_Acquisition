@@ -13,8 +13,8 @@ HAL_StatusTypeDef setupSensors();
 #define A_20V 24818
 #define A_5_5V 6825
 
-#define V_REF_R1 1520
-#define V_REF_R2 1780
+#define V_REF_R1 2200
+#define V_REF_R2 3900
 
 #define MUX1_R1 2200
 #define MUX1_R2 3890
@@ -28,7 +28,10 @@ HAL_StatusTypeDef setupSensors();
 #define VBAT_R1 20000
 #define VBAT_R2 3900
 
+unsigned short propVRef(unsigned short vRef);
 unsigned short vBatValue(unsigned short ADC_Value);
+unsigned short vRefValue(unsigned short ADC_Value);
+unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef);
 
 extern unsigned int Message_Debug_Time;
 extern const unsigned short MESSAGE_DEBUG_REFRESH_RATE;
@@ -62,6 +65,7 @@ extern const unsigned char MAP_2_Pressure;
 extern const unsigned char MAF_Flow;
 extern const unsigned char Cooling_In_Temp;
 extern const unsigned char Cooling_Out_Temp;
+extern const unsigned char Oil_Temp;
 extern const unsigned char Intercooler_Pressure;
 extern const unsigned char Fuel_Pressure;
 

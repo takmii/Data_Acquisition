@@ -22,8 +22,8 @@ HAL_StatusTypeDef sendCANString(const char* message){
 	unsigned char len = 0;
     while (1) {
         if (message[len] == '\0') {
-            len++; // inclui o caractere nulo
-            break;
+        	  len++;
+              break;
         }
         len++;
     }
@@ -57,13 +57,13 @@ HAL_StatusTypeDef sendCANData(unsigned char message[8], unsigned char CAN_ID, un
     txHeader.ExtId = 0;
     txHeader.IDE = CAN_ID_STD;
     txHeader.RTR = CAN_RTR_DATA;
-    txHeader.DLC = 8;
+    txHeader.DLC = CAN_DLC;
     txHeader.TransmitGlobalTime = DISABLE;
 
     status = HAL_CAN_AddTxMessage(&hcan, &txHeader, message, &txMailbox);
     if (status != HAL_OK) {
         return status;
     }
-    while (HAL_CAN_IsTxMessagePending(&hcan, txMailbox));
+    while (HAL_CAN_IsTxMessagePending(&hcan, txMailbox)){}
 	return HAL_OK;
 }

@@ -68,7 +68,7 @@ HAL_StatusTypeDef setADCChannel1(unsigned char channel){
 	    }
 
 	    sConfig1.Rank = ADC_REGULAR_RANK_1;
-	    sConfig1.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
+	    sConfig1.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
 
 	    return HAL_ADC_ConfigChannel(&hadc1, &sConfig1);
 
@@ -135,7 +135,7 @@ HAL_StatusTypeDef setADCChannel2(unsigned char channel){
 	    }
 
 	    sConfig2.Rank = ADC_REGULAR_RANK_1;
-	    sConfig2.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
+	    sConfig2.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
 	    return HAL_ADC_ConfigChannel(&hadc2, &sConfig2);
 
 }
@@ -175,23 +175,23 @@ uint16_t readSensor(unsigned char mux_pin){
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, s2);
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, s3);
 
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET); // EN2 (B3)
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET); // EN1 (B4)
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // EN3 (A15)
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET); // EN2 (B3)
+	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET); // EN1 (B4)
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // EN3 (A15)
 
 	uint16_t value;
 	switch (mux) {
 	        case 1:
-	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET); // Ativa EN1 (B4)
-	            value = readADCValue2(1);
+	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET); // Ativa EN1 (B4)
+	            value = readADCValue1(1);
 	            break;
 	        case 2:
-	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET); // Ativa EN2 (B3)
-	            value = readADCValue2(2);
+	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET); // Ativa EN2 (B3)
+	            value = readADCValue1(2);
 	            break;
 	        case 3:
-	            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // Ativa EN3 (A15)
-	            value = readADCValue2(3);
+	            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // Ativa EN3 (A15)
+	            value = readADCValue1(3);
 	            break;
 	        default:
 	            break;

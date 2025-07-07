@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 HAL_StatusTypeDef sendCANString(const char* message);
+HAL_StatusTypeDef sendCANData(unsigned char message[8], unsigned char CAN_ID, unsigned char CAN_DLC);
 
 #ifdef __cplusplus
 }

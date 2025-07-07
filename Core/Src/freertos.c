@@ -139,48 +139,49 @@ void sensorTask(void *argument)
   for(;;)
   {
 	RTOS_Time = HAL_GetTick();
-	uint16_t v_ref = readADCValue1(VREF_PIN);
+	uint16_t v_ref = vRefValue(readADCValue1(VREF_PIN));
 	uint16_t data;
 	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
 		Message_Debug_Time = RTOS_Time;
-		adc_value=readADCValue1(0);
+		adc_value=resistorValue(readSensor(C1_1),v_ref);
 		//hal_message = sendCANString("Teste: ");
-		sprintf(value, "%u", adc_value);
+		sprintf(value, "%u$", adc_value);
+		//sprintf(value, "%u$", v_ref);
 		hal_message = sendCANString(value);
 		}
 
-	if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
+	/*if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
 	    DATA_01.time = RTOS_Time;
 
-	    data = vBatValue(readADCValue1(VBAT_PIN));  // Tensao da Bateria
+	    data = vBatValue(readADCValue2(VBAT_PIN));  // Tensao da Bateria
 	    DATA_01.data[0] = data&0xFF;
-	    DATA_01.data[1] = (data>>8)&0xF;
-	    data = readADCValue1(TEMP_PIN);  // Sensor de Temperatura Interno
-	    DATA_01.data[1]+=(data&0xF)<<4;
+	    DATA_01.data[1] = (data>>8)&0x0F;
+	    data = readADCValue2(TEMP_PIN);  // Sensor de Temperatura Interno
+	    DATA_01.data[1]|=(data&0x0F)<<4;
 	    DATA_01.data[2] = (data>>4)&0xFF;
 	    DATA_01.data[3] = v_ref&0xFF;    // Tensao Referencia
-	    DATA_01.data[4] = (v_ref>>8)&0xF;
-	    data = readADCValue1(VREF_PIN);  // Sensor de Marcha
+	    DATA_01.data[4] = (v_ref>>8)&0x0F;
+	    data = readADCValue2(GEAR_PIN);  // Sensor de Marcha
 	    if (data>3682){
-	    	DATA_01.data[4] += (7<<4);
+	    	DATA_01.data[4] |= (7<<4);
 	    	}
 	    else if (data>2995){
-	    	DATA_01.data[4] += (1<<4);
+	    	DATA_01.data[4] |= (1<<4);
 	    }
 	    else if (data>2432){
-	    	DATA_01.data[4] += (2<<4);
+	    	DATA_01.data[4] |= (2<<4);
 	    }
 	    else if (data>1852){
-	    	DATA_01.data[4] += (3<<4);
+	    	DATA_01.data[4] |= (3<<4);
 	    }
 	    else if (data>1249){
-	    	DATA_01.data[4] += (4<<4);
+	    	DATA_01.data[4] |= (4<<4);
 	    }
 	    else if (data>672){
-	    	DATA_01.data[4] += (5<<4);
+	    	DATA_01.data[4] |= (5<<4);
 	    }
 	    else {
-	    	DATA_01.data[4] += (6<<4);
+	    	DATA_01.data[4] |= (6<<4);
 	    }
 	    hal_message = sendCANData(DATA_01.data,DATA_01.id,DATA_01.dlc);
 	}
@@ -188,52 +189,142 @@ void sensorTask(void *argument)
 	if (RTOS_Time - DATA_02.time >= DATA_02.refresh_rate) {
 	    DATA_02.time = RTOS_Time;
 
+	    data = readSensor(FR_Susp_Angle);
+	    DATA_02.data[0] = data&0xFF;;
+	    DATA_02.data[1] = (data>>8)&0xF;
 
+	    data = readSensor(FL_Susp_Angle);
+	    DATA_02.data[1] |= (data&0xF)<<4;
+	    DATA_02.data[2] = (data>>4)&0xFF;
 
+	    data = readSensor(RR_Susp_Angle);
+	    DATA_02.data[3] = data&0xFF;;
+	    DATA_02.data[4] = (data>>8)&0xF;
 
+	    data = readSensor(RL_Susp_Angle);
+	    DATA_02.data[4] |= (data&0xF)<<4;
+	    DATA_02.data[5] = (data>>4)&0xFF;
 
+	    data = readSensor(Wheel_Angle);
+	    DATA_02.data[6] = data&0xFF;;
+	    DATA_02.data[7] = (data>>8)&0xF;
 
-	    DATA_02.data[0] = 240;
-	    DATA_02.data[1] = 174;
-	    DATA_02.data[2] = 213;
-	    DATA_02.data[3] = 19;
-	    DATA_02.data[4] = 32;
-	    DATA_02.data[5] = 124;
-	    DATA_02.data[6] = 158;
-	    DATA_02.data[7] = 67;
-
-	    //hal_message = sendCANData(DATA_02.data,DATA_02.id,DATA_02.dlc);
+	    hal_message = sendCANData(DATA_02.data,DATA_02.id,DATA_02.dlc);
 	}
 
 	if (RTOS_Time - DATA_03.time >= DATA_03.refresh_rate) {
 	    DATA_03.time = RTOS_Time;
+
+	    data = readSensor(FR_Hall);
+	    DATA_03.data[0] = data&0xFF;;
+	    DATA_03.data[1] = (data>>8)&0xF;
+
+	    data = readSensor(FL_Hall);
+	    DATA_03.data[1] |= (data&0xF)<<4;
+	    DATA_03.data[2] = (data>>4)&0xFF;
+
+	    data = readSensor(RR_Hall);
+	    DATA_03.data[3] = data&0xFF;;
+	    DATA_03.data[4] = (data>>8)&0xF;
+
+	    data = readSensor(RL_Hall);
+	    DATA_03.data[4] |= (data&0xF)<<4;
+	    DATA_03.data[5] = (data>>4)&0xFF;
+
+	    hal_message = sendCANData(DATA_03.data,DATA_03.id,DATA_03.dlc);
 	}
 
 	if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
 	    DATA_04.time = RTOS_Time;
+
+	    data = readSensor(FR_Disk_Temp);
+	    DATA_04.data[0] = data&0xFF;;
+	    DATA_04.data[1] = (data>>8)&0xF;
+
+	    data = readSensor(FL_Disk_Temp);
+	    DATA_04.data[1] |= (data&0xF)<<4;
+	    DATA_04.data[2] = (data>>4)&0xFF;
+
+	    data = readSensor(RR_Disk_Temp);
+	    DATA_04.data[3] = data&0xFF;;
+	    DATA_04.data[4] = (data>>8)&0xF;
+
+	    data = readSensor(RL_Disk_Temp);
+	    DATA_04.data[4] |= (data&0xF)<<4;
+	    DATA_04.data[5] = (data>>4)&0xFF;
+
+	    data = readSensor(Oil_Temp);
+	    DATA_04.data[6] = data&0xFF;;
+	    DATA_04.data[7] = (data>>8)&0xF;
+
+	    hal_message = sendCANData(DATA_04.data,DATA_04.id,DATA_04.dlc);
 	}
 
 	if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
 	    DATA_05.time = RTOS_Time;
+
+	    data = readSensor(FR_Caliper_Pressure);
+	    DATA_05.data[0] = data&0xFF;;
+	    DATA_05.data[1] = (data>>8)&0xF;
+
+	    data = readSensor(FL_Caliper_Pressure);
+	    DATA_05.data[1] |= (data&0xF)<<4;
+	    DATA_05.data[2] = (data>>4)&0xFF;
+
+	    data = readSensor(RR_Caliper_Pressure);
+	    DATA_05.data[3] = data&0xFF;;
+	    DATA_05.data[4] = (data>>8)&0xF;
+
+	    data = readSensor(RL_Caliper_Pressure);
+	    DATA_05.data[4] |= (data&0xF)<<4;
+	    DATA_05.data[5] = (data>>4)&0xFF;
+
+	    hal_message = sendCANData(DATA_05.data,DATA_05.id,DATA_05.dlc);
 	}
 
 	if (RTOS_Time - DATA_06.time >= DATA_06.refresh_rate) {
 	    DATA_06.time = RTOS_Time;
+
+	    data = readSensor(Acc_Pedal_Angle);
+	    DATA_06.data[0] = data&0xFF;;
+	    DATA_06.data[1] = (data>>8)&0xF;
+
+	    data = readSensor(Brake_Pedal_Angle);
+	    DATA_06.data[1] |= (data&0xF)<<4;
+	    DATA_06.data[2] = (data>>4)&0xFF;
+
+	    hal_message = sendCANData(DATA_05.data,DATA_06.id,DATA_06.dlc);
 	}
 
 	if (RTOS_Time - DATA_07.time >= DATA_07.refresh_rate) {
 	    DATA_07.time = RTOS_Time;
+
+	    data = readSensor(RR_Caliper_Pressure);
+	    DATA_07.data[3] = data&0xFF;;
+	    DATA_07.data[4] = (data>>8)&0xF;
+
+	    hal_message = sendCANData(DATA_05.data,DATA_06.id,DATA_06.dlc);
 	}
 
 	if (RTOS_Time - DATA_08.time >= DATA_08.refresh_rate) {
 	    DATA_08.time = RTOS_Time;
+
+	    data = readSensor(RR_Caliper_Pressure);
+	    DATA_08.data[3] = data&0xFF;;
+	    DATA_08.data[4] = (data>>8)&0xF;
+
+	    data = readSensor(RL_Caliper_Pressure);
+	    DATA_08.data[4] |= (data&0xF)<<4;
+	    DATA_08.data[5] = (data>>4)&0xFF;
+
+	    hal_message = sendCANData(DATA_08.data,DATA_08.id,DATA_08.dlc);
 	}
 
 	if (RTOS_Time - DATA_09.time >= DATA_09.refresh_rate) {
 	    DATA_09.time = RTOS_Time;
-	}
+	}*/
 
-	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(100));
+	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(2));
   }
   /* USER CODE END sensorTask */
 }

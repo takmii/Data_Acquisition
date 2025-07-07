@@ -43,6 +43,7 @@ const unsigned char MAP_2_Pressure = C2_23;
 const unsigned char MAF_Flow = C1_15;
 const unsigned char Cooling_In_Temp = C1_6;
 const unsigned char Cooling_Out_Temp = C1_18;
+const unsigned char Oil_Temp = C1_7;
 const unsigned char Intercooler_Pressure = C2_12;
 const unsigned char Fuel_Pressure = C2_24;
 
@@ -102,5 +103,27 @@ unsigned short vBatValue(unsigned short ADC_Value){
 	unsigned short vBat0 = vBat/A_20V * 4095;
 	return vBat0;
 }
+
+unsigned short vRefValue(unsigned short ADC_Value){
+	float vRef = ADC_Value*(V_REF_R1 + V_REF_R2)/V_REF_R2;
+	unsigned short vRef0 = vRef/A_5_5V * 4095;
+	return vRef0;
+}
+
+unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef){
+	if(ADC_Value==0){
+		return 0;
+	}
+	unsigned short vRefProp = propVRef(vRef);
+	float Rvalue = (((float)vRefProp/ADC_Value)* MUX2_R2) - MUX2_R1 - MUX2_R2;
+	return (unsigned short)Rvalue;
+}
+
+unsigned short propVRef(unsigned short vRef){
+	float prop = (float)vRef/4095;
+	prop = prop * A_5_5V;
+	return (unsigned short)prop;
+}
+
 
 
