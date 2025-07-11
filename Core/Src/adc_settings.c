@@ -1,11 +1,14 @@
 #include "adc.h"
 #include "adc_settings.h"
+#include "tim.h"
 
 extern ADC_HandleTypeDef hadc1;
 
 
 ADC_ChannelConfTypeDef sConfig1 = {0};
 ADC_ChannelConfTypeDef sConfig2 = {0};
+
+unsigned char readings_qtt=5;
 
 HAL_StatusTypeDef setADCChannel1(unsigned char channel){
 	switch(channel) {
@@ -68,7 +71,7 @@ HAL_StatusTypeDef setADCChannel1(unsigned char channel){
 	    }
 
 	    sConfig1.Rank = ADC_REGULAR_RANK_1;
-	    sConfig1.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+	    sConfig1.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 
 	    return HAL_ADC_ConfigChannel(&hadc1, &sConfig1);
 
@@ -135,31 +138,46 @@ HAL_StatusTypeDef setADCChannel2(unsigned char channel){
 	    }
 
 	    sConfig2.Rank = ADC_REGULAR_RANK_1;
-	    sConfig2.SamplingTime = ADC_SAMPLETIME_239CYCLES_5;
+	    sConfig2.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 	    return HAL_ADC_ConfigChannel(&hadc2, &sConfig2);
 
 }
 
 uint16_t readADCValue1(unsigned char channelNumber) {
+
     if (setADCChannel1(channelNumber) != HAL_OK) {
         return 0xFFFF;  // erro
     }
+    delay_us(10);
+    uint32_t sum=0;
     HAL_ADC_Start(&hadc1);
-    if (HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY) != HAL_OK) {
-        return 0xFFFF;  // erro
+    for (uint8_t i = 0; i < readings_qtt; i++) {
+    	if (HAL_ADC_PollForConversion(&hadc1, HAL_MAX_DELAY) != HAL_OK) {
+    		HAL_ADC_Stop(&hadc1);
+    		return 0xFFFF;  // erro
+    	}
+    	sum += HAL_ADC_GetValue(&hadc1);
     }
-    return (uint16_t) HAL_ADC_GetValue(&hadc1);
+    HAL_ADC_Stop(&hadc1);
+    return (uint16_t)(sum / readings_qtt);
 }
 
 uint16_t readADCValue2(unsigned char channelNumber) {
     if (setADCChannel2(channelNumber) != HAL_OK) {
         return 0xFFFF;  // erro
     }
+    delay_us(10);
+    uint32_t sum=0;
     HAL_ADC_Start(&hadc2);
-    if (HAL_ADC_PollForConversion(&hadc2, HAL_MAX_DELAY) != HAL_OK) {
-        return 0xFFFF;  // erro
+    for (uint8_t i = 0; i < readings_qtt; i++) {
+        if (HAL_ADC_PollForConversion(&hadc2, HAL_MAX_DELAY) != HAL_OK) {
+            HAL_ADC_Stop(&hadc2);
+            return 0xFFFF;
+        }
+        sum += HAL_ADC_GetValue(&hadc2);
     }
-    return (uint16_t) HAL_ADC_GetValue(&hadc2);
+    HAL_ADC_Stop(&hadc2);
+    return (uint16_t)(sum / readings_qtt);
 }
 
 uint16_t readSensor(unsigned char mux_pin){
@@ -170,33 +188,43 @@ uint16_t readSensor(unsigned char mux_pin){
 	_Bool s2 = (porta&0b0100)>>2;
 	_Bool s3 = (porta&0b1000)>>3;
 
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7, s0);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, s1);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, s2);
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, s3);
+	HAL_GPIO_WritePin(EN1_GPIO, EN1_PIN, GPIO_PIN_SET); // EN1 (B4)
+	HAL_GPIO_WritePin(EN2_GPIO, EN2_PIN, GPIO_PIN_SET); // EN2 (B3)
+	HAL_GPIO_WritePin(EN3_GPIO, EN3_PIN, GPIO_PIN_SET); // EN3 (A15)
 
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_SET); // EN2 (B3)
-	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_SET); // EN1 (B4)
-	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_SET); // EN3 (A15)
+	HAL_GPIO_WritePin(S0_GPIO, S0_PIN, s0);
+	HAL_GPIO_WritePin(S1_GPIO, S1_PIN, s1);
+	HAL_GPIO_WritePin(S2_GPIO, S2_PIN, s2);
+	HAL_GPIO_WritePin(S3_GPIO, S3_PIN, s3);
 
 	uint16_t value;
 	switch (mux) {
 	        case 1:
-	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_4, GPIO_PIN_RESET); // Ativa EN1 (B4)
+	            HAL_GPIO_WritePin(EN1_GPIO, EN1_PIN, GPIO_PIN_RESET); // Ativa EN1 (B4)
 	            value = readADCValue1(1);
 	            break;
 	        case 2:
-	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3, GPIO_PIN_RESET); // Ativa EN2 (B3)
+	            HAL_GPIO_WritePin(EN2_GPIO, EN2_PIN, GPIO_PIN_RESET); // Ativa EN2 (B3)
 	            value = readADCValue1(2);
 	            break;
 	        case 3:
-	            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, GPIO_PIN_RESET); // Ativa EN3 (A15)
+	            HAL_GPIO_WritePin(EN3_GPIO, EN3_PIN, GPIO_PIN_RESET); // Ativa EN3 (A15)
 	            value = readADCValue1(3);
 	            break;
 	        default:
 	            break;
 	    }
 	return value;
+}
+
+void delay_us(unsigned short us)
+{
+    __HAL_TIM_SET_COUNTER(&htim1, 0);
+    HAL_TIM_Base_Start(&htim1);
+
+    while (__HAL_TIM_GET_COUNTER(&htim1) < us);
+
+    HAL_TIM_Base_Stop(&htim1);
 }
 
 

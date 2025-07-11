@@ -1,5 +1,6 @@
-../Core/Src/adc_settings.c:10:19:setADCChannel1	16	static
-../Core/Src/adc_settings.c:77:19:setADCChannel2	16	static
-../Core/Src/adc_settings.c:143:10:readADCValue1	16	static
-../Core/Src/adc_settings.c:154:10:readADCValue2	16	static
-../Core/Src/adc_settings.c:165:10:readSensor	24	static
+../Core/Src/adc_settings.c:13:19:setADCChannel1	16	static
+../Core/Src/adc_settings.c:80:19:setADCChannel2	16	static
+../Core/Src/adc_settings.c:146:10:readADCValue1	24	static
+../Core/Src/adc_settings.c:165:10:readADCValue2	24	static
+../Core/Src/adc_settings.c:183:10:readSensor	24	static
+../Core/Src/adc_settings.c:220:6:delay_us	16	static

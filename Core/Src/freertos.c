@@ -144,13 +144,14 @@ void sensorTask(void *argument)
 	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
 		Message_Debug_Time = RTOS_Time;
 		adc_value=resistorValue(readSensor(C1_1),v_ref);
+		//adc_value=readSensor(C1_1);
 		//hal_message = sendCANString("Teste: ");
 		sprintf(value, "%u$", adc_value);
 		//sprintf(value, "%u$", v_ref);
 		hal_message = sendCANString(value);
 		}
 
-	/*if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
+	if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
 	    DATA_01.time = RTOS_Time;
 
 	    data = vBatValue(readADCValue2(VBAT_PIN));  // Tensao da Bateria
@@ -260,7 +261,7 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_04.data,DATA_04.id,DATA_04.dlc);
 	}
 
-	if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
+	/*if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
 	    DATA_05.time = RTOS_Time;
 
 	    data = readSensor(FR_Caliper_Pressure);
@@ -324,7 +325,13 @@ void sensorTask(void *argument)
 	    DATA_09.time = RTOS_Time;
 	}*/
 
-	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(2));
+
+	if (RTOS_Time - BUFFER_ACK.time >= BUFFER_ACK.refresh_rate) {
+		BUFFER_ACK.time = RTOS_Time;
+		BUFFER_ACK.data[0]='1';
+		hal_message = sendCANData(BUFFER_ACK.data,BUFFER_ACK.id,BUFFER_ACK.dlc);
+	}
+	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(Time_Mult));
   }
   /* USER CODE END sensorTask */
 }

@@ -37,7 +37,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/can.h \
+ ../Core/Inc/adc.h ../Core/Inc/main.h ../Core/Inc/can.h ../Core/Inc/tim.h \
  ../Core/Inc/gpio.h ../Core/Inc/can_write.h ../Core/Inc/adc_settings.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h:
@@ -81,6 +81,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/adc.h:
 ../Core/Inc/main.h:
 ../Core/Inc/can.h:
+../Core/Inc/tim.h:
 ../Core/Inc/gpio.h:
 ../Core/Inc/can_write.h:
 ../Core/Inc/adc_settings.h:

@@ -13,6 +13,8 @@ HAL_StatusTypeDef setupSensors();
 #define A_20V 24818
 #define A_5_5V 6825
 
+#define V_res 0.05
+
 #define V_REF_R1 2200
 #define V_REF_R2 3900
 
@@ -34,6 +36,7 @@ unsigned short vRefValue(unsigned short ADC_Value);
 unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef);
 
 extern unsigned int Message_Debug_Time;
+extern const unsigned char Time_Mult;
 extern const unsigned short MESSAGE_DEBUG_REFRESH_RATE;
 
 
@@ -88,6 +91,7 @@ extern Sensor DATA_06;
 extern Sensor DATA_07;
 extern Sensor DATA_08;
 extern Sensor DATA_09;
+extern Sensor BUFFER_ACK;
 
 
 

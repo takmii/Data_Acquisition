@@ -1,5 +1,5 @@
-../Core/Src/sensors.c:61:19:setupSensors	4	static
-../Core/Src/sensors.c:101:16:vBatValue	24	static
-../Core/Src/sensors.c:107:16:vRefValue	24	static
-../Core/Src/sensors.c:113:16:resistorValue	32	static
-../Core/Src/sensors.c:122:16:propVRef	24	static
+../Core/Src/sensors.c:62:19:setupSensors	4	static
+../Core/Src/sensors.c:106:16:vBatValue	24	static
+../Core/Src/sensors.c:112:16:vRefValue	24	static
+../Core/Src/sensors.c:118:16:resistorValue	32	static
+../Core/Src/sensors.c:127:16:propVRef	24	static

@@ -15,6 +15,9 @@ HAL_StatusTypeDef setADCChannel2(unsigned char channel);
 uint16_t readADCValue1(unsigned char channelNumber);
 uint16_t readADCValue2(unsigned char channelNumber);
 uint16_t readSensor(unsigned char mux_pin);
+void delay_us(unsigned short us);
+
+extern unsigned char readings_qtt;
 
 #define C1_1  0b101011
 #define C1_2  0b101001
@@ -59,6 +62,27 @@ uint16_t readSensor(unsigned char mux_pin);
 #define C2_22 0b110101
 #define C2_23 0b101101
 #define C2_24 0b101111
+
+#define S0_PIN GPIO_PIN_7
+#define S0_GPIO GPIOB
+
+#define S1_PIN GPIO_PIN_8
+#define S1_GPIO GPIOB
+
+#define S2_PIN GPIO_PIN_5
+#define S2_GPIO GPIOB
+
+#define S3_PIN GPIO_PIN_6
+#define S3_GPIO GPIOB
+
+#define EN1_PIN GPIO_PIN_4
+#define EN1_GPIO GPIOB
+
+#define EN2_PIN GPIO_PIN_3
+#define EN2_GPIO GPIOB
+
+#define EN3_PIN GPIO_PIN_15
+#define EN3_GPIO GPIOA
 
 #define VREF_PIN 0
 #define VBAT_PIN 4

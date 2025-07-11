@@ -9,7 +9,7 @@
 // Sensor de marcha
 
 
-const unsigned char Time_Mult = 5;
+const unsigned char Time_Mult = 2;
 
 unsigned int Message_Debug_Time;
 const unsigned short MESSAGE_DEBUG_REFRESH_RATE = 500;
@@ -56,18 +56,19 @@ Sensor DATA_06;
 Sensor DATA_07;
 Sensor DATA_08;
 Sensor DATA_09;
+Sensor BUFFER_ACK;
 
 
 HAL_StatusTypeDef setupSensors(){
-	DATA_01.refresh_rate = 5*Time_Mult;
+	DATA_01.refresh_rate = Time_Mult;
 	DATA_01.id = 0x02;
 	DATA_01.dlc = 5;
 
-	DATA_02.refresh_rate = 5*Time_Mult;
+	DATA_02.refresh_rate = Time_Mult;
 	DATA_02.id = 0x03;
 	DATA_02.dlc = 8;
 
-	DATA_03.refresh_rate = 5*Time_Mult;
+	DATA_03.refresh_rate = Time_Mult;
 	DATA_03.id = 0x04;
 	DATA_03.dlc = 8;
 
@@ -79,7 +80,7 @@ HAL_StatusTypeDef setupSensors(){
 	DATA_05.id = 0x06;
 	DATA_05.dlc = 6;
 
-	DATA_06.refresh_rate = 5*Time_Mult;
+	DATA_06.refresh_rate = Time_Mult;
 	DATA_06.id = 0x07;
 	DATA_06.dlc = 3;
 
@@ -91,9 +92,13 @@ HAL_StatusTypeDef setupSensors(){
 	DATA_08.id = 0x09;
 	DATA_08.dlc = 6;
 
-	DATA_09.refresh_rate = 5*Time_Mult;
+	DATA_09.refresh_rate = Time_Mult;
 	DATA_09.id = 0x0A;
 	DATA_09.dlc = 6;
+
+	BUFFER_ACK.refresh_rate = Time_Mult;
+	BUFFER_ACK.id = 0x0B;
+	BUFFER_ACK.dlc = 1;
 
 	return HAL_OK;
 }
