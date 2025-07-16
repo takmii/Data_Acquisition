@@ -1,2 +1,3 @@
-../Core/Src/freertos.c:76:6:MX_FREERTOS_Init	1
-../Core/Src/freertos.c:131:6:sensorTask	13
+../Core/Src/freertos.c:84:6:MX_FREERTOS_Init	1
+../Core/Src/freertos.c:143:6:sensorTask	13
+../Core/Src/freertos.c:391:6:StartTask02	1

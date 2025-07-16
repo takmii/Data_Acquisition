@@ -70,8 +70,50 @@ extern const unsigned char Cooling_In_Temp;
 extern const unsigned char Cooling_Out_Temp;
 extern const unsigned char Oil_Temp;
 extern const unsigned char Intercooler_Pressure;
+extern const unsigned char Intercooler_Temp;
 extern const unsigned char Fuel_Pressure;
+extern const unsigned char Fuel_Temp;
 
+extern const unsigned char V_Ref_index;
+extern const unsigned char V_Bat_index;
+extern const unsigned char Temp_index;
+extern const unsigned char Gear_index;
+
+extern const unsigned char Wheel_Angle_index;
+extern const unsigned char Acc_Pedal_Angle_index;
+extern const unsigned char Brake_Pedal_Angle_index;
+extern const unsigned char FR_Hall_index;
+extern const unsigned char FL_Hall_index;
+extern const unsigned char RR_Hall_index;
+extern const unsigned char RL_Hall_index;
+extern const unsigned char EBS_Sensor_index;
+extern const unsigned char Firewall_Temp_index;
+extern const unsigned char FR_Caliper_Pressure_index;
+extern const unsigned char FL_Caliper_Pressure_index;
+extern const unsigned char RR_Caliper_Pressure_index;
+extern const unsigned char RL_Caliper_Pressure_index;
+extern const unsigned char F_Brakeline_Pressure_index;
+extern const unsigned char R_Brakeline_Pressure_index;
+extern const unsigned char FR_Disk_Temp_index;
+extern const unsigned char FL_Disk_Temp_index;
+extern const unsigned char RR_Disk_Temp_index;
+extern const unsigned char RL_Disk_Temp_index;
+extern const unsigned char FR_Susp_Angle_index;
+extern const unsigned char FL_Susp_Angle_index;
+extern const unsigned char RR_Susp_Angle_index;
+extern const unsigned char RL_Susp_Angle_index;
+extern const unsigned char MAP_1_Pressure_index;
+extern const unsigned char MAP_2_Pressure_index;
+extern const unsigned char MAF_Flow_index;
+extern const unsigned char Cooling_In_Temp_index;
+extern const unsigned char Cooling_Out_Temp_index;
+extern const unsigned char Oil_Temp_index;
+extern const unsigned char Intercooler_Pressure_index;
+extern const unsigned char Intercooler_Temp_index;
+extern const unsigned char Fuel_Pressure_index;
+extern const unsigned char Fuel_Temp_index;
+
+extern const unsigned char Teste_index;
 
 
 typedef struct {

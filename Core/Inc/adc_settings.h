@@ -14,10 +14,15 @@ HAL_StatusTypeDef setADCChannel1(unsigned char channel);
 HAL_StatusTypeDef setADCChannel2(unsigned char channel);
 uint16_t readADCValue1(unsigned char channelNumber);
 uint16_t readADCValue2(unsigned char channelNumber);
-uint16_t readSensor(unsigned char mux_pin);
+uint16_t readSensor(unsigned char mux_pin,unsigned char index);
 void delay_us(unsigned short us);
+uint16_t returnAvgData(uint16_t data, uint8_t index);
+void setAvgDataEmpty();
 
 extern unsigned char readings_qtt;
+#define sensor_qtt 37
+#define sensor_buffer_size 5
+extern unsigned short sensorData[sensor_qtt][sensor_buffer_size];
 
 #define C1_1  0b101011
 #define C1_2  0b101001

@@ -10,6 +10,9 @@ ADC_ChannelConfTypeDef sConfig2 = {0};
 
 unsigned char readings_qtt=5;
 
+
+unsigned short sensorData[sensor_qtt][sensor_buffer_size];
+
 HAL_StatusTypeDef setADCChannel1(unsigned char channel){
 	switch(channel) {
 	       	case 0:
@@ -180,7 +183,7 @@ uint16_t readADCValue2(unsigned char channelNumber) {
     return (uint16_t)(sum / readings_qtt);
 }
 
-uint16_t readSensor(unsigned char mux_pin){
+uint16_t readSensor(unsigned char mux_pin, unsigned char index){
 	unsigned char mux = mux_pin>>4;
 	unsigned char porta  = mux_pin&0b1111;
 	_Bool s0 = porta&0b0001;
@@ -214,7 +217,7 @@ uint16_t readSensor(unsigned char mux_pin){
 	        default:
 	            break;
 	    }
-	return value;
+	return returnAvgData(value,index);
 }
 
 void delay_us(unsigned short us)
@@ -225,6 +228,38 @@ void delay_us(unsigned short us)
     while (__HAL_TIM_GET_COUNTER(&htim1) < us);
 
     HAL_TIM_Base_Stop(&htim1);
+}
+
+uint16_t returnAvgData(uint16_t data, uint8_t index){
+	uint8_t weight = 3;
+	uint32_t sum=data*weight;
+  float factor = 0.95;
+	uint8_t n = weight;
+	for (uint8_t i=0;i<sensor_buffer_size;i++){
+		if (sensorData[index][i]==0xFFFF){
+			sensorData[index][i]=data;
+			return sensorData[index][i];
+		}
+		else{
+      if (sensorData[index][i]>(factor*data)&&sensorData[index][i]<((1+(1-factor))*data)){
+			sum = sum+sensorData[index][i];
+			n++;
+      }
+		}
+	}
+  for (uint8_t i=0;i<sensor_buffer_size-1;i++){
+    sensorData[index][i]=sensorData[index][i+1];
+  }
+	sensorData[index][sensor_buffer_size-1]=sum/n;
+	return sensorData[index][sensor_buffer_size-1];
+}
+
+void setAvgDataEmpty(){
+	for (uint8_t i=0;i<sensor_qtt;i++){
+		for (uint8_t j=0;j<sensor_buffer_size;j++){
+			sensorData[i][j]=0xFFFF;
+		}
+	}
 }
 
 

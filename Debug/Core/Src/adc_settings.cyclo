@@ -1,6 +1,8 @@
-../Core/Src/adc_settings.c:13:19:setADCChannel1	19
-../Core/Src/adc_settings.c:80:19:setADCChannel2	19
-../Core/Src/adc_settings.c:146:10:readADCValue1	4
-../Core/Src/adc_settings.c:165:10:readADCValue2	4
-../Core/Src/adc_settings.c:183:10:readSensor	5
-../Core/Src/adc_settings.c:220:6:delay_us	2
+../Core/Src/adc_settings.c:16:19:setADCChannel1	19
+../Core/Src/adc_settings.c:83:19:setADCChannel2	19
+../Core/Src/adc_settings.c:149:10:readADCValue1	4
+../Core/Src/adc_settings.c:168:10:readADCValue2	4
+../Core/Src/adc_settings.c:186:10:readSensor	5
+../Core/Src/adc_settings.c:223:6:delay_us	2
+../Core/Src/adc_settings.c:233:10:returnAvgData	6
+../Core/Src/adc_settings.c:257:6:setAvgDataEmpty	3
