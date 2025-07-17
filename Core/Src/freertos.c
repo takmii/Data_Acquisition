@@ -58,13 +58,6 @@ const osThreadAttr_t sensor_Task_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for CAN_Task */
-osThreadId_t CAN_TaskHandle;
-const osThreadAttr_t CAN_Task_attributes = {
-  .name = "CAN_Task",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal1,
-};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -72,7 +65,6 @@ const osThreadAttr_t CAN_Task_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void sensorTask(void *argument);
-void StartTask02(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -120,9 +112,6 @@ void MX_FREERTOS_Init(void) {
   /* creation of sensor_Task */
   sensor_TaskHandle = osThreadNew(sensorTask, NULL, &sensor_Task_attributes);
 
-  /* creation of CAN_Task */
-  CAN_TaskHandle = osThreadNew(StartTask02, NULL, &CAN_Task_attributes);
-
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
@@ -155,12 +144,12 @@ void sensorTask(void *argument)
 	uint16_t data;
 	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
 		Message_Debug_Time = RTOS_Time;
-		adc_value=resistorValue(readSensor(C1_1,Teste_index),v_ref);
+		//adc_value=resistorValue(readSensor(C1_1,Teste_index),v_ref);
 		//adc_value=readSensor(C1_1);
 		//hal_message = sendCANString("Teste: ");
-		sprintf(value, "%u$", adc_value);
+		//sprintf(value, "%u$", adc_value);
 		//sprintf(value, "%u$", v_ref);
-		hal_message = sendCANString(value);
+		//hal_message = sendCANString(value);
 		}
 
 	if (RTOS_Time - DATA_01.time >= DATA_01.refresh_rate) {
@@ -306,6 +295,10 @@ void sensorTask(void *argument)
 	    DATA_06.data[1] |= (data&0xF)<<4;
 	    DATA_06.data[2] = (data>>4)&0xFF;*/
 
+	    DATA_06.data[0] = 0;
+	    DATA_06.data[1] = 0;
+	    DATA_06.data[2] = 0;
+
 	    data = readSensor(F_Brakeline_Pressure,F_Brakeline_Pressure_index);
 	    DATA_06.data[3] = data&0xFF;;
 	    DATA_06.data[4] = (data>>8)&0xF;
@@ -379,24 +372,6 @@ void sensorTask(void *argument)
 	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(Time_Mult));
   }
   /* USER CODE END sensorTask */
-}
-
-/* USER CODE BEGIN Header_StartTask02 */
-/**
-* @brief Function implementing the CAN_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartTask02 */
-void StartTask02(void *argument)
-{
-  /* USER CODE BEGIN StartTask02 */
-  /* Infinite loop */
-  for(;;)
-  {
-    osDelay(1);
-  }
-  /* USER CODE END StartTask02 */
 }
 
 /* Private application code --------------------------------------------------*/
