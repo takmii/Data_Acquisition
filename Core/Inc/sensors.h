@@ -32,7 +32,6 @@ HAL_StatusTypeDef setupSensors();
 
 unsigned short propVRef(unsigned short vRef);
 unsigned short vBatValue(unsigned short ADC_Value);
-unsigned short vRefValue(unsigned short ADC_Value);
 unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef);
 
 extern unsigned int Message_Debug_Time;

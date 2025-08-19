@@ -15,7 +15,8 @@ unsigned int Message_Debug_Time;
 const unsigned short MESSAGE_DEBUG_REFRESH_RATE = 500;
 
 
-const unsigned char Wheel_Angle = C2_16;
+//const unsigned char Wheel_Angle = C2_16;
+const unsigned char Wheel_Angle = C1_24;
 //const unsigned char Acc_Pedal_Angle = C1_2;
 //const unsigned char Brake_Pedal_Angle = C1_3;
 const unsigned char FR_Hall = C2_11;
@@ -152,11 +153,6 @@ unsigned short vBatValue(unsigned short ADC_Value){
 	return vBat0;
 }
 
-unsigned short vRefValue(unsigned short ADC_Value){
-	float vRef = ADC_Value*(V_REF_R1 + V_REF_R2)/V_REF_R2;
-	unsigned short vRef0 = vRef/A_5_5V * 4095;
-	return vRef0;
-}
 
 unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef){
 	if(ADC_Value==0){

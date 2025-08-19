@@ -140,7 +140,7 @@ void sensorTask(void *argument)
   for(;;)
   {
 	RTOS_Time = HAL_GetTick();
-	uint16_t v_ref = vRefValue(returnAvgData(readADCValue1(VREF_PIN),V_Ref_index));
+	uint16_t v_ref = returnAvgData(readADCValue1(VREF_PIN),V_Ref_index);
 	uint16_t data;
 	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
 		Message_Debug_Time = RTOS_Time;
@@ -158,12 +158,13 @@ void sensorTask(void *argument)
 	    data = vBatValue(returnAvgData(readADCValue2(VBAT_PIN),V_Bat_index));  // Tensao da Bateria
 	    DATA_01.data[0] = data&0xFF;
 	    DATA_01.data[1] = (data>>8)&0x0F;
-	    data = readADCValue2(returnAvgData(TEMP_PIN,Temp_index));  // Sensor de Temperatura Interno
+
+	    data = returnAvgData(readADCValue2(TEMP_PIN),Temp_index);  // Sensor de Temperatura Interno
 	    DATA_01.data[1]|=(data&0x0F)<<4;
 	    DATA_01.data[2] = (data>>4)&0xFF;
 	    DATA_01.data[3] = v_ref&0xFF;    // Tensao Referencia
 	    DATA_01.data[4] = (v_ref>>8)&0x0F;
-	    data = readADCValue2(returnAvgData(GEAR_PIN,Gear_index));  // Sensor de Marcha
+	    data = returnAvgData(readADCValue2(GEAR_PIN),Gear_index);  // Sensor de Marcha
 	    if (data>3682){
 	    	DATA_01.data[4] |= (7<<4);
 	    	}
