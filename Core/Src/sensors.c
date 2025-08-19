@@ -15,8 +15,7 @@ unsigned int Message_Debug_Time;
 const unsigned short MESSAGE_DEBUG_REFRESH_RATE = 500;
 
 
-//const unsigned char Wheel_Angle = C2_16;
-const unsigned char Wheel_Angle = C1_24;
+const unsigned char Wheel_Angle = C2_16;
 //const unsigned char Acc_Pedal_Angle = C1_2;
 //const unsigned char Brake_Pedal_Angle = C1_3;
 const unsigned char FR_Hall = C2_11;
