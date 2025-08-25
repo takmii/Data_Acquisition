@@ -15,7 +15,7 @@ unsigned int Message_Debug_Time;
 const unsigned short MESSAGE_DEBUG_REFRESH_RATE = 500;
 
 
-const unsigned char Wheel_Angle = C2_16;
+const unsigned char Wheel_Angle = C2_22;
 //const unsigned char Acc_Pedal_Angle = C1_2;
 //const unsigned char Brake_Pedal_Angle = C1_3;
 const unsigned char FR_Hall = C2_11;
@@ -44,6 +44,7 @@ const unsigned char RL_Susp_Angle = C2_4;
 //const unsigned char Cooling_In_Temp = C1_6;
 //const unsigned char Cooling_Out_Temp = C1_18;
 //const unsigned char Oil_Temp = C1_7;
+const unsigned char Oil_Pressure = C2_23;
 //const unsigned char Intercooler_Pressure = C2_12;
 //const unsigned char Intercooler_Temp;
 //const unsigned char Fuel_Pressure = C2_24;
@@ -83,12 +84,13 @@ const unsigned char MAF_Flow_index = 29;
 const unsigned char Cooling_In_Temp_index = 30;
 const unsigned char Cooling_Out_Temp_index = 31;
 const unsigned char Oil_Temp_index = 32;
-const unsigned char Intercooler_Pressure_index = 33;
-const unsigned char Intercooler_Temp_index = 34;
-const unsigned char Fuel_Pressure_index = 35;
-const unsigned char Fuel_Temp_index = 36;
+const unsigned char Oil_Pressure_index = 33;
+const unsigned char Intercooler_Pressure_index = 34;
+const unsigned char Intercooler_Temp_index = 35;
+const unsigned char Fuel_Pressure_index = 36;
+const unsigned char Fuel_Temp_index = 37;
 
-const unsigned char Teste_index = 37;
+const unsigned char Teste_index = 38;
 
 Sensor DATA_01;
 Sensor DATA_02;

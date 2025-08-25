@@ -21,7 +21,7 @@ void setAvgDataEmpty();
 
 extern unsigned char readings_qtt;
 #define sensor_qtt 37
-#define sensor_buffer_size 5
+#define sensor_buffer_size 10
 extern unsigned short sensorData[sensor_qtt][sensor_buffer_size];
 
 #define C1_1  0b101011

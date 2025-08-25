@@ -237,33 +237,21 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_03.data,DATA_03.id,DATA_03.dlc);
 	}
 
-	/*if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
+	if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
 	    DATA_04.time = RTOS_Time;
 
-	    data = readSensor(FR_Disk_Temp,FR_Disk_Temp_index);
+	    data = readSensor(Oil_Pressure,Oil_Pressure_index);
 	    DATA_04.data[0] = data&0xFF;;
 	    DATA_04.data[1] = (data>>8)&0xF;
 
-	    data = readSensor(FL_Disk_Temp,FL_Disk_Temp_index);
-	    DATA_04.data[1] |= (data&0xF)<<4;
-	    DATA_04.data[2] = (data>>4)&0xFF;
-
-	    data = readSensor(RR_Disk_Temp,RR_Disk_Temp_index);
-	    DATA_04.data[3] = data&0xFF;;
-	    DATA_04.data[4] = (data>>8)&0xF;
-
-	    data = readSensor(RL_Disk_Temp,RL_Disk_Temp_index);
-	    DATA_04.data[4] |= (data&0xF)<<4;
-	    DATA_04.data[5] = (data>>4)&0xFF;
-
-	    data = readSensor(Oil_Temp,Oil_Temp_index);
-	    DATA_04.data[6] = data&0xFF;;
-	    DATA_04.data[7] = (data>>8)&0xF;
+	    //data = readSensor(Oil_Temp,Oil_Temp_index);
+	    //DATA_04.data[1] |= (data&0xF)<<4;
+	    //DATA_04.data[2] = (data>>4)&0xFF;
 
 	    hal_message = sendCANData(DATA_04.data,DATA_04.id,DATA_04.dlc);
 	}
 
-	if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
+	/*if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
 	    DATA_05.time = RTOS_Time;
 
 	    data = readSensor(FR_Caliper_Pressure);

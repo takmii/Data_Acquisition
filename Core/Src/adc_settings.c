@@ -8,7 +8,7 @@ extern ADC_HandleTypeDef hadc1;
 ADC_ChannelConfTypeDef sConfig1 = {0};
 ADC_ChannelConfTypeDef sConfig2 = {0};
 
-unsigned char readings_qtt=20;
+unsigned char readings_qtt=50;
 
 
 unsigned short sensorData[sensor_qtt][sensor_buffer_size];
@@ -74,7 +74,7 @@ HAL_StatusTypeDef setADCChannel1(unsigned char channel){
 	    }
 
 	    sConfig1.Rank = ADC_REGULAR_RANK_1;
-	    sConfig1.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
+	    sConfig1.SamplingTime = ADC_SAMPLETIME_1CYCLE_5;
 
 	    return HAL_ADC_ConfigChannel(&hadc1, &sConfig1);
 
@@ -141,7 +141,7 @@ HAL_StatusTypeDef setADCChannel2(unsigned char channel){
 	    }
 
 	    sConfig2.Rank = ADC_REGULAR_RANK_1;
-	    sConfig2.SamplingTime = ADC_SAMPLETIME_13CYCLES_5;
+	    sConfig2.SamplingTime = ADC_SAMPLETIME_55CYCLES_5;
 	    return HAL_ADC_ConfigChannel(&hadc2, &sConfig2);
 
 }
