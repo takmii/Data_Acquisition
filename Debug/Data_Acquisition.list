@@ -942,7 +942,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* adcHandle)
  80008f8:	40012800 	.word	0x40012800
 
 080008fc <setADCChannel1>:
-unsigned char readings_qtt=50;
+unsigned char readings_qtt=40;
 
 
 unsigned short sensorData[sensor_qtt][sensor_buffer_size];
@@ -1342,8 +1342,8 @@ uint16_t readADCValue1(unsigned char channelNumber) {
  8000b4c:	f64f 73ff 	movw	r3, #65535	@ 0xffff
  8000b50:	e031      	b.n	8000bb6 <readADCValue1+0x82>
     }
-    delay_us(10);
- 8000b52:	200a      	movs	r0, #10
+    delay_us(1);
+ 8000b52:	2001      	movs	r0, #1
  8000b54:	f000 f91a 	bl	8000d8c <delay_us>
     uint32_t sum=0;
  8000b58:	2300      	movs	r3, #0
@@ -1424,8 +1424,8 @@ uint16_t readADCValue2(unsigned char channelNumber) {
  8000be0:	f64f 73ff 	movw	r3, #65535	@ 0xffff
  8000be4:	e031      	b.n	8000c4a <readADCValue2+0x82>
     }
-    delay_us(10);
- 8000be6:	200a      	movs	r0, #10
+    delay_us(1);
+ 8000be6:	2001      	movs	r0, #1
  8000be8:	f000 f8d0 	bl	8000d8c <delay_us>
     uint32_t sum=0;
  8000bec:	2300      	movs	r3, #0
@@ -1984,9 +1984,9 @@ void MX_CAN_Init(void)
  8000fd4:	4b17      	ldr	r3, [pc, #92]	@ (8001034 <MX_CAN_Init+0x64>)
  8000fd6:	4a18      	ldr	r2, [pc, #96]	@ (8001038 <MX_CAN_Init+0x68>)
  8000fd8:	601a      	str	r2, [r3, #0]
-  hcan.Init.Prescaler = 4;
+  hcan.Init.Prescaler = 8;
  8000fda:	4b16      	ldr	r3, [pc, #88]	@ (8001034 <MX_CAN_Init+0x64>)
- 8000fdc:	2204      	movs	r2, #4
+ 8000fdc:	2208      	movs	r2, #8
  8000fde:	605a      	str	r2, [r3, #4]
   hcan.Init.Mode = CAN_MODE_NORMAL;
  8000fe0:	4b14      	ldr	r3, [pc, #80]	@ (8001034 <MX_CAN_Init+0x64>)

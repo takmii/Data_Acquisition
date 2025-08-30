@@ -8,7 +8,7 @@ extern ADC_HandleTypeDef hadc1;
 ADC_ChannelConfTypeDef sConfig1 = {0};
 ADC_ChannelConfTypeDef sConfig2 = {0};
 
-unsigned char readings_qtt=50;
+unsigned char readings_qtt=40;
 
 
 unsigned short sensorData[sensor_qtt][sensor_buffer_size];
@@ -151,7 +151,7 @@ uint16_t readADCValue1(unsigned char channelNumber) {
     if (setADCChannel1(channelNumber) != HAL_OK) {
         return 0xFFFF;  // erro
     }
-    delay_us(10);
+    delay_us(1);
     uint32_t sum=0;
     HAL_ADC_Start(&hadc1);
     for (uint8_t i = 0; i < readings_qtt; i++) {
@@ -169,7 +169,7 @@ uint16_t readADCValue2(unsigned char channelNumber) {
     if (setADCChannel2(channelNumber) != HAL_OK) {
         return 0xFFFF;  // erro
     }
-    delay_us(10);
+    delay_us(1);
     uint32_t sum=0;
     HAL_ADC_Start(&hadc2);
     for (uint8_t i = 0; i < readings_qtt; i++) {
