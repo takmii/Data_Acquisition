@@ -134,6 +134,7 @@ extern Sensor DATA_06;
 extern Sensor DATA_07;
 extern Sensor DATA_08;
 extern Sensor DATA_09;
+extern Sensor DATA_10;
 extern Sensor BUFFER_ACK;
 
 

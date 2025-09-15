@@ -237,7 +237,7 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_03.data,DATA_03.id,DATA_03.dlc);
 	}
 
-	if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
+	/*if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
 	    DATA_04.time = RTOS_Time;
 
 	    data = readSensor(Oil_Pressure,Oil_Pressure_index);
@@ -251,7 +251,7 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_04.data,DATA_04.id,DATA_04.dlc);
 	}
 
-	/*if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
+	if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
 	    DATA_05.time = RTOS_Time;
 
 	    data = readSensor(FR_Caliper_Pressure);
@@ -351,6 +351,27 @@ void sensorTask(void *argument)
 	if (RTOS_Time - DATA_09.time >= DATA_09.refresh_rate) {
 	    DATA_09.time = RTOS_Time;
 	}*/
+
+	if (RTOS_Time - DATA_10.time >= DATA_10.refresh_rate) {
+		    DATA_10.time = RTOS_Time;
+		    data = readSensor(MAP_1_Pressure,MAP_1_Pressure_index);
+		    DATA_10.data[0] = data&0xFF;;
+		    DATA_10.data[1] = (data>>8)&0xF;
+
+    	    data = readSensor(MAP_2_Pressure,MAP_2_Pressure_index);
+    	    DATA_10.data[1] |= (data&0xF)<<4;
+    	    DATA_10.data[2] = (data>>4)&0xFF;
+
+    	    data = readSensor(MAF_Flow,MAF_Flow_index);
+    	    DATA_10.data[3] = data&0xFF;
+    	    DATA_10.data[4] = (data>>8)&0xF;
+
+    	    data = readSensor(Oil_Temp,Oil_Temp_index);
+    	    DATA_10.data[4] |= (data&0xF)<<4;
+    	    DATA_10.data[5] = (data>>4)&0xFF;
+
+    	    hal_message = sendCANData(DATA_10.data,DATA_10.id,DATA_10.dlc);
+		}
 
 
 	if (RTOS_Time - BUFFER_ACK.time >= BUFFER_ACK.refresh_rate) {

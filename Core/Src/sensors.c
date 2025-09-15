@@ -38,12 +38,12 @@ const unsigned char FR_Susp_Angle = C2_7;
 const unsigned char FL_Susp_Angle = C2_6;
 const unsigned char RR_Susp_Angle = C2_5;
 const unsigned char RL_Susp_Angle = C2_4;
-//const unsigned char MAP_1_Pressure = C2_11;
-//const unsigned char MAP_2_Pressure = C2_23;
-//const unsigned char MAF_Flow = C1_15;
+const unsigned char MAP_1_Pressure = C1_1;
+const unsigned char MAP_2_Pressure = C1_2;
+const unsigned char MAF_Flow = C1_13;
 //const unsigned char Cooling_In_Temp = C1_6;
 //const unsigned char Cooling_Out_Temp = C1_18;
-//const unsigned char Oil_Temp = C1_7;
+const unsigned char Oil_Temp = C1_14;
 const unsigned char Oil_Pressure = C2_23;
 //const unsigned char Intercooler_Pressure = C2_12;
 //const unsigned char Intercooler_Temp;
@@ -101,6 +101,7 @@ Sensor DATA_06;
 Sensor DATA_07;
 Sensor DATA_08;
 Sensor DATA_09;
+Sensor DATA_10;
 Sensor BUFFER_ACK;
 
 
@@ -140,6 +141,10 @@ HAL_StatusTypeDef setupSensors(){
 	DATA_09.refresh_rate = 25*Time_Mult;
 	DATA_09.id = 0x0A;
 	DATA_09.dlc = 6;
+
+	DATA_10.refresh_rate = 25*Time_Mult;
+	DATA_10.id = 0x0D;
+	DATA_10.dlc = 6;
 
 	BUFFER_ACK.refresh_rate = Time_Mult;
 	BUFFER_ACK.id = 0x0B;
