@@ -123,6 +123,7 @@ typedef struct {
     unsigned char id;
     unsigned char dlc;
     unsigned char data[8];
+    unsigned char n;
 } Sensor;
 
 extern Sensor DATA_01;
@@ -136,7 +137,7 @@ extern Sensor DATA_08;
 extern Sensor DATA_09;
 extern Sensor DATA_10;
 extern Sensor BUFFER_ACK;
-
+extern Sensor ERROR_CHECK;
 
 
 #ifdef __cplusplus

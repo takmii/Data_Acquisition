@@ -89,6 +89,9 @@ void MX_FREERTOS_Init(void) {
 	DATA_07.time = HAL_GetTick();
 	DATA_08.time = HAL_GetTick();
 	DATA_09.time = HAL_GetTick();
+	DATA_10.time = HAL_GetTick();
+	ERROR_CHECK.time = HAL_GetTick();
+	BUFFER_ACK.time = HAL_GetTick();
 
   /* USER CODE END Init */
 
@@ -136,12 +139,14 @@ void sensorTask(void *argument)
 	uint32_t RTOS_Time;
 	uint16_t adc_value;
 	char value[20];
+	unsigned char error;
   /* Infinite loop */
   for(;;)
   {
 	RTOS_Time = HAL_GetTick();
 	uint16_t v_ref = returnAvgData(readADCValue1(VREF_PIN),V_Ref_index);
 	uint16_t data;
+	error=0xFF;
 	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
 		Message_Debug_Time = RTOS_Time;
 		//adc_value=resistorValue(readSensor(C1_1,Teste_index),v_ref);
@@ -159,11 +164,20 @@ void sensorTask(void *argument)
 	    DATA_01.data[0] = data&0xFF;
 	    DATA_01.data[1] = (data>>8)&0x0F;
 
+	    if (!data){
+	    	error = V_Bat_index;
+	    }
+
 	    data = returnAvgData(readADCValue2(TEMP_PIN),Temp_index);  // Sensor de Temperatura Interno
 	    DATA_01.data[1]|=(data&0x0F)<<4;
 	    DATA_01.data[2] = (data>>4)&0xFF;
 	    DATA_01.data[3] = v_ref&0xFF;    // Tensao Referencia
 	    DATA_01.data[4] = (v_ref>>8)&0x0F;
+
+	    if (!data){
+	    	 error = Temp_index;
+	    }
+
 	    data = returnAvgData(readADCValue2(GEAR_PIN),Gear_index);  // Sensor de Marcha
 	    if (data>3682){
 	    	DATA_01.data[4] |= (7<<4);
@@ -196,21 +210,41 @@ void sensorTask(void *argument)
 	    DATA_02.data[0] = data&0xFF;;
 	    DATA_02.data[1] = (data>>8)&0xF;
 
+	    if (!data){
+	    	error = FR_Susp_Angle_index;
+	    }
+
 	    data = readSensor(FL_Susp_Angle,FL_Susp_Angle_index);
 	    DATA_02.data[1] |= (data&0xF)<<4;
 	    DATA_02.data[2] = (data>>4)&0xFF;
+
+	    if (!data){
+	    	    	 error = FL_Susp_Angle_index;
+	    }
 
 	    data = readSensor(RR_Susp_Angle,RR_Susp_Angle_index);
 	    DATA_02.data[3] = data&0xFF;;
 	    DATA_02.data[4] = (data>>8)&0xF;
 
+	    if (!data){
+	    	    	 error = RR_Susp_Angle_index;
+	    }
+
 	    data = readSensor(RL_Susp_Angle,RL_Susp_Angle_index);
 	    DATA_02.data[4] |= (data&0xF)<<4;
 	    DATA_02.data[5] = (data>>4)&0xFF;
 
+	    if (!data){
+	     	 error = RL_Susp_Angle_index;
+	    }
+
 	    data = readSensor(Wheel_Angle,Wheel_Angle_index);
 	    DATA_02.data[6] = data&0xFF;;
 	    DATA_02.data[7] = (data>>8)&0xF;
+
+	    if (!data){
+	    	 error = Wheel_Angle_index;
+	    }
 
 	    hal_message = sendCANData(DATA_02.data,DATA_02.id,DATA_02.dlc);
 	}
@@ -358,21 +392,42 @@ void sensorTask(void *argument)
 		    DATA_10.data[0] = data&0xFF;;
 		    DATA_10.data[1] = (data>>8)&0xF;
 
+		    if (!data){
+		    	  error = MAP_1_Pressure_index;
+		    }
+
     	    data = readSensor(MAP_2_Pressure,MAP_2_Pressure_index);
     	    DATA_10.data[1] |= (data&0xF)<<4;
     	    DATA_10.data[2] = (data>>4)&0xFF;
+
+    	    if (!data){
+    	    	error = MAP_2_Pressure_index;
+    	    }
 
     	    data = readSensor(MAF_Flow,MAF_Flow_index);
     	    DATA_10.data[3] = data&0xFF;
     	    DATA_10.data[4] = (data>>8)&0xF;
 
+    	    if (!data){
+    	    	error = MAF_Flow_index;
+    	    }
+
     	    data = readSensor(Oil_Temp,Oil_Temp_index);
     	    DATA_10.data[4] |= (data&0xF)<<4;
     	    DATA_10.data[5] = (data>>4)&0xFF;
 
+    	    if (!data){
+    	    	error = Oil_Temp_index;
+    	    }
+
     	    hal_message = sendCANData(DATA_10.data,DATA_10.id,DATA_10.dlc);
 		}
 
+	if (RTOS_Time - ERROR_CHECK.time >= ERROR_CHECK.refresh_rate){
+		ERROR_CHECK.time = RTOS_Time;
+		ERROR_CHECK.data[0]=error;
+		hal_message = sendCANData(ERROR_CHECK.data,ERROR_CHECK.id,ERROR_CHECK.dlc);
+	}
 
 	if (RTOS_Time - BUFFER_ACK.time >= BUFFER_ACK.refresh_rate) {
 		BUFFER_ACK.time = RTOS_Time;

@@ -15,7 +15,7 @@ unsigned int Message_Debug_Time;
 const unsigned short MESSAGE_DEBUG_REFRESH_RATE = 500;
 
 
-const unsigned char Wheel_Angle = C2_22;
+const unsigned char Wheel_Angle = C1_15;
 //const unsigned char Acc_Pedal_Angle = C1_2;
 //const unsigned char Brake_Pedal_Angle = C1_3;
 const unsigned char FR_Hall = C2_11;
@@ -34,10 +34,10 @@ const unsigned char R_Brakeline_Pressure = C2_18;
 //const unsigned char FL_Disk_Temp = C2_10;
 //const unsigned char RR_Disk_Temp = C2_21;
 //const unsigned char RL_Disk_Temp = C2_22;
-const unsigned char FR_Susp_Angle = C2_7;
-const unsigned char FL_Susp_Angle = C2_6;
-const unsigned char RR_Susp_Angle = C2_5;
-const unsigned char RL_Susp_Angle = C2_4;
+const unsigned char FR_Susp_Angle = C1_17;
+const unsigned char FL_Susp_Angle = C1_16;
+const unsigned char RR_Susp_Angle = C1_3;
+const unsigned char RL_Susp_Angle = C1_4;
 const unsigned char MAP_1_Pressure = C1_1;
 const unsigned char MAP_2_Pressure = C1_2;
 const unsigned char MAF_Flow = C1_13;
@@ -103,6 +103,7 @@ Sensor DATA_08;
 Sensor DATA_09;
 Sensor DATA_10;
 Sensor BUFFER_ACK;
+Sensor ERROR_CHECK;
 
 
 HAL_StatusTypeDef setupSensors(){
@@ -149,6 +150,10 @@ HAL_StatusTypeDef setupSensors(){
 	BUFFER_ACK.refresh_rate = Time_Mult;
 	BUFFER_ACK.id = 0x0B;
 	BUFFER_ACK.dlc = 1;
+
+	ERROR_CHECK.refresh_rate = 50*Time_Mult;
+	ERROR_CHECK.id = 0x0E;
+	ERROR_CHECK.dlc = 1;
 
 	return HAL_OK;
 }
