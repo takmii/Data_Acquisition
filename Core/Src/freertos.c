@@ -49,6 +49,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
+uint8_t debug_mode = 1;
+
 HAL_StatusTypeDef hal_message;
 /* USER CODE END Variables */
 /* Definitions for sensor_Task */
@@ -137,17 +139,24 @@ void sensorTask(void *argument)
   /* USER CODE BEGIN sensorTask */
 	TickType_t xLastWakeTime = xTaskGetTickCount();
 	uint32_t RTOS_Time;
+	uint32_t Time_old=HAL_GetTick();
+	uint32_t Time_now;
 	uint16_t adc_value;
+	uint32_t time_dif;
 	char value[20];
 	unsigned char error;
   /* Infinite loop */
   for(;;)
   {
 	RTOS_Time = HAL_GetTick();
+	time_dif = RTOS_Time - Time_old;
+	Time_old=RTOS_Time;
+
+
 	uint16_t v_ref = returnAvgData(readADCValue1(VREF_PIN),V_Ref_index);
 	uint16_t data;
 	error=0xFF;
-	if (RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE) {
+	if ((RTOS_Time - Message_Debug_Time >= MESSAGE_DEBUG_REFRESH_RATE)&!debug_mode) {
 		Message_Debug_Time = RTOS_Time;
 		//adc_value=resistorValue(readSensor(C1_1,Teste_index),v_ref);
 		//adc_value=readSensor(C1_1);
@@ -179,27 +188,12 @@ void sensorTask(void *argument)
 	    }
 
 	    data = returnAvgData(readADCValue2(GEAR_PIN),Gear_index);  // Sensor de Marcha
-	    if (data>3682){
-	    	DATA_01.data[4] |= (7<<4);
-	    	}
-	    else if (data>2995){
-	    	DATA_01.data[4] |= (1<<4);
-	    }
-	    else if (data>2432){
-	    	DATA_01.data[4] |= (2<<4);
-	    }
-	    else if (data>1852){
-	    	DATA_01.data[4] |= (3<<4);
-	    }
-	    else if (data>1249){
-	    	DATA_01.data[4] |= (4<<4);
-	    }
-	    else if (data>672){
-	    	DATA_01.data[4] |= (5<<4);
-	    }
-	    else {
-	    	DATA_01.data[4] |= (6<<4);
-	    }
+	    DATA_01.data[4] |= ((data > 3682) ? 7 :
+	                        (data > 2995) ? 1 :
+	                        (data > 2432) ? 2 :
+	                        (data > 1852) ? 3 :
+	                        (data > 1249) ? 4 :
+	                        (data > 672)  ? 5 : 6) << 4;
 	    hal_message = sendCANData(DATA_01.data,DATA_01.id,DATA_01.dlc);
 	}
 
@@ -429,9 +423,13 @@ void sensorTask(void *argument)
 		hal_message = sendCANData(ERROR_CHECK.data,ERROR_CHECK.id,ERROR_CHECK.dlc);
 	}
 
+	Time_now = HAL_GetTick() - Time_old;
+
 	if (RTOS_Time - BUFFER_ACK.time >= BUFFER_ACK.refresh_rate) {
 		BUFFER_ACK.time = RTOS_Time;
 		BUFFER_ACK.data[0]='1';
+		BUFFER_ACK.data[1]=time_dif&0xFF;
+		BUFFER_ACK.data[2]=Time_now&0xFF;
 		hal_message = sendCANData(BUFFER_ACK.data,BUFFER_ACK.id,BUFFER_ACK.dlc);
 	}
 	vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(Time_Mult));

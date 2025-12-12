@@ -8,7 +8,7 @@ extern ADC_HandleTypeDef hadc1;
 ADC_ChannelConfTypeDef sConfig1 = {0};
 ADC_ChannelConfTypeDef sConfig2 = {0};
 
-unsigned char readings_qtt=40;
+unsigned char readings_qtt=25;
 
 
 unsigned short sensorData[sensor_qtt][sensor_buffer_size];
@@ -233,7 +233,10 @@ void delay_us(unsigned short us)
 uint16_t returnAvgData(uint16_t data, uint8_t index){
 	uint8_t weight = 3;
 	uint32_t sum=data*weight;
-  float factor = 0.95;
+  //float factor = 0.95;
+	uint16_t min_threshold = (data * 95) / 100;
+	uint16_t max_threshold = (data * 105) / 100;
+
 	uint8_t n = weight;
 	for (uint8_t i=0;i<sensor_buffer_size;i++){
 		if (sensorData[index][i]==0xFFFF){
@@ -241,7 +244,8 @@ uint16_t returnAvgData(uint16_t data, uint8_t index){
 			return sensorData[index][i];
 		}
 		else{
-      if (sensorData[index][i]>(factor*data)&&sensorData[index][i]<((1+(1-factor))*data)){
+			if (sensorData[index][i] > min_threshold &&
+			    sensorData[index][i] < max_threshold) {
 			sum = sum+sensorData[index][i];
 			n++;
       }

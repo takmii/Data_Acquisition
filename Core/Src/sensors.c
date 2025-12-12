@@ -35,7 +35,7 @@ const unsigned char R_Brakeline_Pressure = C2_18;
 //const unsigned char RR_Disk_Temp = C2_21;
 //const unsigned char RL_Disk_Temp = C2_22;
 const unsigned char FR_Susp_Angle = C1_17;
-const unsigned char FL_Susp_Angle = C1_16;
+const unsigned char FL_Susp_Angle = C1_5;
 const unsigned char RR_Susp_Angle = C1_3;
 const unsigned char RL_Susp_Angle = C1_4;
 const unsigned char MAP_1_Pressure = C1_1;
@@ -149,7 +149,7 @@ HAL_StatusTypeDef setupSensors(){
 
 	BUFFER_ACK.refresh_rate = Time_Mult;
 	BUFFER_ACK.id = 0x0B;
-	BUFFER_ACK.dlc = 1;
+	BUFFER_ACK.dlc = 3;
 
 	ERROR_CHECK.refresh_rate = 50*Time_Mult;
 	ERROR_CHECK.id = 0x0E;
