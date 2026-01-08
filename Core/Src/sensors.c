@@ -159,25 +159,45 @@ HAL_StatusTypeDef setupSensors(){
 }
 
 unsigned short vBatValue(unsigned short ADC_Value){
-	float vBat = ADC_Value*(VBAT_R1 + VBAT_R2)/VBAT_R2;
+	/*float vBat = ADC_Value*(VBAT_R1 + VBAT_R2)/VBAT_R2;
 	unsigned short vBat0 = vBat/A_20V * 4095;
-	return vBat0;
+	return vBat0;*/
+	uint32_t vBat_scaled = ((uint32_t)ADC_Value * VBAT_FACTOR_SCALED) / 10000UL;
+	uint32_t result = (vBat_scaled * A_20V_INV_SCALED) / 10000UL;
+	return (unsigned short)result;
 }
 
 
 unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef){
-	if(ADC_Value==0){
+	/*if(ADC_Value==0){
 		return 0;
 	}
 	unsigned short vRefProp = propVRef(vRef);
 	float Rvalue = (((float)vRefProp/ADC_Value)* MUX2_R2) - MUX2_R1 - MUX2_R2;
-	return (unsigned short)Rvalue;
+	return (unsigned short)Rvalue;*/
+
+	if (ADC_Value == 0) {
+        return 0;
+    }
+
+    unsigned short vRefProp = propVRef(vRef);
+
+    uint32_t numerator = (uint32_t)vRefProp * MUX2_R2;
+    uint32_t Rvalue = numerator / ADC_Value;
+
+    if (Rvalue < MUX2_R_TOTAL) {
+        return 0;
+    }
+
+    return (unsigned short)(Rvalue - MUX2_R_TOTAL);
 }
 
 unsigned short propVRef(unsigned short vRef){
-	float prop = (float)vRef/4095;
+	/*float prop = (float)vRef/4095;
 	prop = prop * A_5_5V;
-	return (unsigned short)prop;
+	return (unsigned short)prop;*/
+
+	return (unsigned short)(((uint32_t)vRef * A_5_5V_SCALED) / 10000UL);
 }
 
 

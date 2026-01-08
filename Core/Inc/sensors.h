@@ -30,6 +30,24 @@ HAL_StatusTypeDef setupSensors();
 #define VBAT_R1 20000
 #define VBAT_R2 3900
 
+
+// VBAT Factor: (R1 + R2) / R2
+#define VBAT_FACTOR_SCALED ((uint32_t)(((VBAT_R1 + VBAT_R2) * 10000UL) / VBAT_R2))
+
+// A_20V inverso: 4095 / A_20V
+#define A_20V_INV_SCALED ((uint32_t)((4095UL * 10000UL) / A_20V))
+
+// A_5_5V normalizado: A_5_5V / 4095
+#define A_5_5V_SCALED ((uint32_t)((A_5_5V * 10000UL) / 4095UL))
+
+// Somas de resistores (para cálculos)
+#define MUX1_R_TOTAL (MUX1_R1 + MUX1_R2)
+#define MUX2_R_TOTAL (MUX2_R1 + MUX2_R2)
+#define MUX3_R_TOTAL (MUX3_R1 + MUX3_R2)
+#define V_REF_R_TOTAL (V_REF_R1 + V_REF_R2)
+
+
+
 unsigned short propVRef(unsigned short vRef);
 unsigned short vBatValue(unsigned short ADC_Value);
 unsigned short resistorValue(unsigned short ADC_Value,unsigned short vRef);

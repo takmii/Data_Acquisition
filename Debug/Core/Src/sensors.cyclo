@@ -1,4 +1,4 @@
 ../Core/Src/sensors.c:109:19:setupSensors	1
 ../Core/Src/sensors.c:161:16:vBatValue	1
-../Core/Src/sensors.c:168:16:resistorValue	2
-../Core/Src/sensors.c:177:16:propVRef	1
+../Core/Src/sensors.c:171:16:resistorValue	3
+../Core/Src/sensors.c:195:16:propVRef	1
