@@ -194,6 +194,8 @@ void sensorTask(void *argument)
 	                        (data > 1852) ? 3 :
 	                        (data > 1249) ? 4 :
 	                        (data > 672)  ? 5 : 6) << 4;
+
+	    //hal_message = sendCANString("CA1_");
 	    hal_message = sendCANData(DATA_01.data,DATA_01.id,DATA_01.dlc);
 	}
 
@@ -265,12 +267,13 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_03.data,DATA_03.id,DATA_03.dlc);
 	}
 
-	/*if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
+	if (RTOS_Time - DATA_04.time >= DATA_04.refresh_rate) {
 	    DATA_04.time = RTOS_Time;
 
 	    data = readSensor(Oil_Pressure,Oil_Pressure_index);
 	    DATA_04.data[0] = data&0xFF;;
 	    DATA_04.data[1] = (data>>8)&0xF;
+	    //hal_message = sendCANString("CA_");
 
 	    //data = readSensor(Oil_Temp,Oil_Temp_index);
 	    //DATA_04.data[1] |= (data&0xF)<<4;
@@ -279,7 +282,7 @@ void sensorTask(void *argument)
 	    hal_message = sendCANData(DATA_04.data,DATA_04.id,DATA_04.dlc);
 	}
 
-	if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
+	/*if (RTOS_Time - DATA_05.time >= DATA_05.refresh_rate) {
 	    DATA_05.time = RTOS_Time;
 
 	    data = readSensor(FR_Caliper_Pressure);

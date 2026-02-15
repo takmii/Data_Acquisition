@@ -5,4 +5,4 @@
 ../Core/Src/adc_settings.c:186:10:readSensor	24	static
 ../Core/Src/adc_settings.c:223:6:delay_us	16	static
 ../Core/Src/adc_settings.c:233:10:returnAvgData	40	static
-../Core/Src/adc_settings.c:257:6:setAvgDataEmpty	16	static
+../Core/Src/adc_settings.c:261:6:setAvgDataEmpty	16	static
